@@ -26,14 +26,15 @@ class PostsController extends Controller
             'image' => ['required', 'image'],
         ]);
 
+
+
         // store image in uploads directory and second parametr is driver to store our file like 's3' but we have public
         $imagePath = request('image')->store('uploads', 'public');
 
-
-        auth()->user()->posts()->create([
-            'caption' => $data['caption'],
-            'image' => $imagePath,
-        ]);
+        auth()->user()->posts()->create(array_merge(
+            $data,
+            ['image' => $imagePath],
+        ));
 
         return redirect('/profile/'. auth()->user()->id);
     }
@@ -42,4 +43,6 @@ class PostsController extends Controller
     {
        return view('posts.show', compact('post'));
     }
+
+
 }
